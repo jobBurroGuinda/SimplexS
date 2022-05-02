@@ -6,7 +6,7 @@ package simplexs.logica;
  * @author ameri
  */
 public class MsSimplexMin {
-    
+     
     private float m;
     private float num;
 
