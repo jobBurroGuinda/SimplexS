@@ -40,20 +40,31 @@ public class MethodGra implements IMethod {
     
     @Override
     public String calculate() {
+        text = "Restricción 1:\n";
         // r1c1 = coorenada restriccion1 1
         Coordenada r1c1 = new Coordenada(r1x1 * 0, d1 / r1x2);
+        text += "\tCoordenada 1: (" + r1c1.getX() + ", " + r1c1.getY() + ")\n";
         //float r1c1;
         Coordenada r1c2 = new Coordenada(d1/r1x1, r1x2 *0);
-        
+        text += "\tCoordenada 2: (" + r1c2.getX() + ", " + r1c2.getY() + ")";
+        text += "\n\n";
+        text += "Restricción 2:\n";
         //r2c1 = restriccion 2 cordenada 1
         Coordenada r2c1 = new Coordenada(r2x1 * 0, d2/r2x2);
+        text += "\tCoordenada 1: (" + r2c1.getX() + ", " + r2c1.getY() + ")\n";
         //r2c2 = restriccion 2 coordenada 2
         Coordenada r2c2 = new Coordenada(d2/r2x1, r2x2*0);
-        
+        text += "\tCoordenada 2: (" + r2c2.getX() + ", " + r2c2.getY() + ")";
+        text += "\n\n";
+        text += "Restricción 3:\n";
         //r3c1 = restriccion 3 cordenada 1
         Coordenada r3c1 = new Coordenada(r3x1*0, d3/r3x2);
+        text += "\tCoordenada 1: (" + r3c1.getX() + ", " + r3c1.getY() + ")\n";
         //r3c2 = restriccion 3 cordenada 2
         Coordenada r3c2 = new Coordenada(d3/r3x1, r3x2*0);
+        text += "\tCoordenada 2: (" + r3c2.getX() + ", " + r3c2.getY() + ")";
+        
+        Grafica grafica =  new Grafica(r1c1, r1c2, r2c1, r2c2, r3c1, r3c2);
         
         return text;
     }

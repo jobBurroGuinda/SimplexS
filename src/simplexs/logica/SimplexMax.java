@@ -193,4 +193,110 @@ public class SimplexMax extends Method {
     }
     
     
+    public String calgulateForGrafic(String texto){
+        this.text = texto;
+        
+        float[] m = new float[filas-1];
+        if(matriz[3][0] < matriz[3][1]){
+            //Se elige la fila pivote
+            for(int i=0 ; i<m.length ; i++){
+                m[i] = matriz[i][5] / matriz[i][0]; 
+            }
+            // Encuentra la fila pivote
+            int fm = Comparator.compareThree(m[0], m[1], m[2]);
+            // Asigna el valor del pivote con la intersección entre la columna y fila pivote            
+            pivote = matriz[fm][0];
+            // Dividimostodos los valores de la fila pivote entre el valor del pivote
+            // O la multiplicamos por el reciproco del pivote
+            for(int j=0 ; j<columnas ; j++){
+                matriz[fm][j] /= pivote;
+            }
+            
+            float g;
+            for(int i=0 ; i<filas ; i++){
+                //Limpia la primera fila
+                if(i != fm){
+                    g = matriz[i][0] * -1;
+                    for(int j=0 ; j<columnas ; j++){
+                        matriz[i][j] += matriz[fm][j] * g;
+                    }
+                }
+            }
+            
+            m = new float[filas-1];
+            for(int i=0 ; i<m.length ; i++){
+                m[i] = matriz[i][5] / matriz[i][1]; 
+            }
+            fm = Comparator.compareThree(m[0], m[1], m[2]);
+            pivote = matriz[fm][1];
+            for(int j=1 ; j<columnas ; j++){
+                matriz[fm][j] /= pivote;
+            }
+            
+            for(int i=0 ; i<filas ; i++){
+                if(i != fm) {
+                    g = matriz[i][1] * -1;
+                    for(int j=0 ; j<columnas ; j++){
+                        matriz[i][j] += matriz[fm][j] * g;
+                    }
+                }
+            }
+            
+            text += "\n\n\n";
+            text += "La solución óptima es: Z = "+matriz[filas-1][columnas-1] + "\n";
+            for(int i=0 ; i<(filas-2) ; i++){
+                text += "x"+(i+1)+ "="+matriz[i][5]+", ";
+            }
+        }
+        else {
+            for(int i=0 ; i<m.length ; i++){
+                m[i] = matriz[i][5] / matriz[i][1]; 
+            }
+            int fm = Comparator.compareThree(m[0], m[1], m[2]);
+            pivote = matriz[fm][1];
+            for(int j=0 ; j<columnas ; j++){
+                matriz[fm][j] /= pivote;
+            }
+            
+            float g;
+            for(int i=0 ; i<filas ; i++){
+                g = matriz[i][1] * -1;
+                for(int j=0 ; j<columnas ; j++){
+                    if(i != fm){
+                        matriz[i][j] += matriz[fm][j] * g;
+                    }
+                }
+            }
+            
+            m = new float[filas-1];
+            for(int i=0 ; i<m.length ; i++){
+                m[i] = matriz[i][5] / matriz[i][0]; 
+            }
+            fm = Comparator.compareThree(m[0], m[1], m[2]);
+            pivote = matriz[fm][0];
+            for(int j=1 ; j<columnas ; j++){
+                matriz[fm][j] /= pivote;
+            }
+            
+            for(int i=0 ; i<filas ; i++){
+                if(i != fm) {
+                    g = matriz[i][0] * -1;
+                    for(int j=0 ; j<columnas ; j++){
+                        matriz[i][j] += matriz[fm][j] * g;
+                    }
+                }
+            }
+            
+            text += "\n\n\n";
+            text += "La solución óptima es: Z = "+matriz[filas-1][columnas-1] + "\n";
+            for(int i=0 ; i<(filas-2) ; i++){
+                text += "x"+(i+1)+ "="+matriz[i][5]+", ";
+            }
+        }
+        
+        
+        return text;
+    }
+    
+    
 }

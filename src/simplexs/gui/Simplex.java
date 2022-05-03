@@ -3,6 +3,7 @@ package simplexs.gui;
 
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import simplexs.logica.MethodGra;
 import simplexs.logica.MsSimplexMin;
 import simplexs.logica.SimplexMax;
 import simplexs.logica.SimplexMin;
@@ -42,6 +43,19 @@ public class Simplex extends javax.swing.JFrame {
     private float pivote = 0;
     private double pm1 = 0.0;
     private double pm2 = 0.0;
+    
+    
+    // x de la función objetivo
+    private float x1, x2;
+    // r = restriccion}
+    // r1 = restriccion 1
+    private float r1x1, r1x2;
+    // r2 = restriccion 2
+    private float r2x1, r2x2;
+    // r3 = restriccion 3
+    private float r3x1, r3x2;
+    // d = resultados de igualaciones
+    private float d1, d2, d3;
     
     private String text = "";
     
@@ -99,6 +113,7 @@ public class Simplex extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         area = new javax.swing.JTextArea();
         btnMaximizacion = new javax.swing.JButton();
+        botonGrafico = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -265,6 +280,13 @@ public class Simplex extends javax.swing.JFrame {
             }
         });
 
+        botonGrafico.setText("Gráfico");
+        botonGrafico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonGraficoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -294,10 +316,6 @@ public class Simplex extends javax.swing.JFrame {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabel4))
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                                    .addComponent(btnMinimizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(btnMaximizacion))
                                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addGroup(jPanel1Layout.createSequentialGroup()
@@ -338,7 +356,13 @@ public class Simplex extends javax.swing.JFrame {
                                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(cx25, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(cx15, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(cx05, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
+                                                        .addComponent(cx05, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(btnMinimizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(botonGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(btnMaximizacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(28, 28, 28)
                                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -396,7 +420,9 @@ public class Simplex extends javax.swing.JFrame {
                             .addComponent(jLabel11)
                             .addComponent(btnMinimizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnMaximizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(193, 193, 193)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botonGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(142, 142, 142)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 81, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
@@ -668,6 +694,22 @@ public class Simplex extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cx11ActionPerformed
 
+    private void botonGraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGraficoActionPerformed
+        
+        setDataMatrizMax();
+        setDataGrafic();
+        
+        // Se manda llamar la clase que realizará los cálculos de maximización por Simplex
+        SimplexMax sm = new SimplexMax(matriz, pivote, filas, columnas);
+        MethodGra mg = new MethodGra( x1,  x2,  r1x1, 
+             r1x2,  r2x1,  r2x2,  r3x1,
+             r3x2,  d1,  d2,  d3,  text);
+        text = sm.calgulateForGrafic(mg.calculate());
+        
+        desplegar();
+        
+    }//GEN-LAST:event_botonGraficoActionPerformed
+
     
     public void desplegar(){
         limpiar();
@@ -676,6 +718,24 @@ public class Simplex extends javax.swing.JFrame {
     
     public void limpiar(){
         area.setText("");
+    }
+    
+    
+    public void setDataGrafic() {
+        x1 = Float.parseFloat(cx30.getText());
+        x2 = Float.parseFloat(cx31.getText());
+        // Primera restriccion
+        r1x1 = Float.parseFloat(cx00.getText());
+        r1x2 = Float.parseFloat(cx01.getText());
+        d1 = Float.parseFloat(cx05.getText());
+        // Segunda restriccion
+        r2x1 = Float.parseFloat(cx10.getText());
+        r2x2 = Float.parseFloat(cx11.getText());
+        d2 = Float.parseFloat(cx15.getText());
+        // Tercera restriccion
+        r3x1 = Float.parseFloat(cx20.getText());
+        r3x2 = Float.parseFloat(cx21.getText());
+        d3 = Float.parseFloat(cx25.getText());
     }
     
     
@@ -811,6 +871,7 @@ public class Simplex extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea area;
+    private javax.swing.JButton botonGrafico;
     private javax.swing.JButton btnMaximizacion;
     private javax.swing.JButton btnMinimizacion;
     private javax.swing.JTextField cx00;
